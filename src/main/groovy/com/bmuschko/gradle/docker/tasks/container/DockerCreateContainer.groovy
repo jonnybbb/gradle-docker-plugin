@@ -326,6 +326,10 @@ class DockerCreateContainer extends DockerExistingImage {
             containerCommand.hostConfig.withBinds(createdBinds)
         }
 
+        if(hostConfig.tmpFs.getOrNull()) {
+            containerCommand.hostConfig.withTmpFs(hostConfig.tmpFs.get())
+        }
+
         if(hostConfig.extraHosts.getOrNull()) {
             containerCommand.hostConfig.withExtraHosts(hostConfig.extraHosts.get() as String[])
         }
@@ -471,6 +475,10 @@ class DockerCreateContainer extends DockerExistingImage {
 
         @Input
         @Optional
+        final MapProperty<String, String> tmpFs
+
+        @Input
+        @Optional
         final ListProperty<String> extraHosts
 
         @Input
@@ -555,6 +563,7 @@ class DockerCreateContainer extends DockerExistingImage {
             publishAll = objectFactory.property(Boolean)
             publishAll.set(false)
             binds = objectFactory.mapProperty(String, String)
+            tmpFs = objectFactory.mapProperty(String, String)
             extraHosts = objectFactory.listProperty(String)
             extraHosts.empty()
             logConfig = objectFactory.property(LogConfig)
