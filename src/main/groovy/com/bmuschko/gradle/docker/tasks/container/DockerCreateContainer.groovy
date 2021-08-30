@@ -473,6 +473,15 @@ class DockerCreateContainer extends DockerExistingImage {
         @Optional
         final MapProperty<String, String> binds
 
+        /**
+         * Docker container tmpfs support. The mount is temporary, and only persisted in the host memory.
+         * When the container stops, the tmpfs mount is removed, and files written there won’t be persisted.
+         * For example, to create a temporary 50MB writeable non executable filesystem mounted under /data
+         * in the container: {@code tmpFs = ['/data': 'rw,noexec,size=50m']}
+         *
+         * Original documentation: https://docs.docker.com/storage/tmpfs/
+         *
+         */
         @Input
         @Optional
         final MapProperty<String, String> tmpFs
