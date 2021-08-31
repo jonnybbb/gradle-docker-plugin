@@ -98,9 +98,7 @@ class DockerCreateContainerFunctionalTest extends AbstractGroovyDslFunctionalTes
             task execContainer(type: DockerExecContainer) {
                 dependsOn startContainer
                 targetContainerId startContainer.getContainerId()
-                withCommand(['touch', '/testdata/test.txt'])
-                withCommand(['echo', 'Successfully mounted a writeable tmpfs', '>' ,'/testdata/test.txt'])
-                withCommand(['cat', '/testdata/test.txt'])
+                withCommand(['grep', 'tmpfs /testdata', '/proc/mounts'])
                 successOnExitCodes=[0]
             }
 
@@ -120,7 +118,7 @@ class DockerCreateContainerFunctionalTest extends AbstractGroovyDslFunctionalTes
 
         expect:
         def result = build('inspectContainer')
-        result.output.contains("Successfully mounted a writeable tmpfs")
+        result.output.contains("tmpfs /testdata tmpfs rw,nosuid,nodev,noexec,relatime,size=2048k 0 0")
     }
 
     def "can override default MAC address"() {
